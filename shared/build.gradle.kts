@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("com.google.gms.google-services")
+    //id("com.google.gms.google-services")
 }
 
 kotlin {
@@ -23,7 +23,7 @@ kotlin {
 
         val commonMain by getting
         commonMain.dependencies {
-            implementation("dev.gitlive:firebase-firestore:1.6.2")
+            //implementation("dev.gitlive:firebase-firestore:1.6.2")
             implementation("io.ktor:ktor-client-core:$ktorVersion")
         }
         val commonTest by getting {

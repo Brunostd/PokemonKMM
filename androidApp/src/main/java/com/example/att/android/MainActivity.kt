@@ -1,13 +1,17 @@
 package com.example.att.android
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -17,6 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.att.Greeting
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun MyApplicationTheme(
@@ -58,15 +64,32 @@ fun MyApplicationTheme(
 }
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val mainScope = MainScope()
+        var aux: MutableState<String> = mutableStateOf("")
+
+        mainScope.launch {
+            runCatching {
+                Greeting().hello()
+            }.onSuccess {
+                aux.value = it
+            }.onFailure {
+                aux.value = "Error"
+            }
+        }
+
         setContent {
             MyApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting(Greeting().greeting())
+                    Column() {
+                        Greeting2(text = aux.value)
+                    }
                 }
             }
         }
@@ -75,6 +98,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(text: String) {
+    Text(text = text)
+}
+
+@Composable
+fun Greeting2(text: String) {
     Text(text = text)
 }
 
