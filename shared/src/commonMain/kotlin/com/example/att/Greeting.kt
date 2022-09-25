@@ -33,7 +33,7 @@ class Greeting {
         return ""
     }
 
-    suspend fun getHello(): MutableList<Hello> {
+    suspend fun getHello(): List<Hello> {
          return client.get("https://gitcdn.link/cdn/KaterinaPetrova/greeting/7d47a42fc8d28820387ac7f4aaf36d69e434adc1/greetings.json").body()
     }
 }
