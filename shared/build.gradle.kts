@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization") version "1.7.10"
     id("com.android.library")
     //id("com.google.gms.google-services")
 }
@@ -24,7 +25,14 @@ kotlin {
         val commonMain by getting
         commonMain.dependencies {
             //implementation("dev.gitlive:firebase-firestore:1.6.2")
+
             implementation("io.ktor:ktor-client-core:$ktorVersion")
+            implementation("io.ktor:ktor-client-logging:$ktorVersion")
+            implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+            implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+            // Serialization Optional
+            //implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
         }
         val commonTest by getting {
             dependencies {

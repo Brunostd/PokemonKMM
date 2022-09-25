@@ -1,27 +1,39 @@
-package com.example.att
-
-import com.example.att.model.BlocosModel
+import com.example.att.Platform
+import com.example.att.httpClient
+import com.example.att.model.Hello
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.engine.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.kotlinx.serializer.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.util.*
-import kotlinx.coroutines.flow.callbackFlow
-
+import io.ktor.http.*
+import io.ktor.serialization.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.serializer
 
 class Greeting {
-    private val platform: Platform = getPlatform()
-    ///private var db = Firebase.firestoregit add
-    private val httpClient = HttpClient()
+    val client = HttpClient() {
+        install(ContentNegotiation) {
+            json(Json {
+                ignoreUnknownKeys = true
+                prettyPrint = true
+                isLenient = true
+            })
+        }
+    }
+
 
     @Throws(Throwable::class)
     suspend fun greeting(): String {
-        return "${hello()}, ${platform.name}!"
+        //return "${getHello().random().string}}!"
+        return ""
     }
 
-    suspend fun hello(): String{
-        val response: HttpResponse = httpClient.get("https://gitcdn.link/cdn/KaterinaPetrova/greeting/7d47a42fc8d28820387ac7f4aaf36d69e434adc1/greetings.json")
-        return response.bodyAsText()
+    suspend fun getHello(): MutableList<Hello> {
+         return client.get("https://gitcdn.link/cdn/KaterinaPetrova/greeting/7d47a42fc8d28820387ac7f4aaf36d69e434adc1/greetings.json").body()
     }
 }
